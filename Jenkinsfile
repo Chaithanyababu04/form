@@ -25,11 +25,11 @@ pipeline{
             }
             steps {
                 sh '''
-                docker stop form-app || true
-                docker rm form-app || true
+                docker stop form || true
+                docker rm form || true
 
                 docker run -d \
-                --name form-app \
+                --name form \
                 --link mysql:mysql \
                 -e DB_HOST=$DB_HOST \
                 -e DB_USER=$DB_USER \
