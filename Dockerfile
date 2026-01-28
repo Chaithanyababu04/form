@@ -3,4 +3,4 @@ WORKDIR /app
 COPY backend/. .
 RUN npm install
 EXPOSE 3000
-CMD ["npm", "app.js"]
+CMD ["node", "app.js"]
