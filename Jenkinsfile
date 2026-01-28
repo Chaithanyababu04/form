@@ -23,8 +23,8 @@ pipeline{
                 --name form form \
                 -e DB_HOST=localhost \
                 -e DB_USER=root \
-                -e DB_PASS=password
-                -e DB_NAME=formdb
+                -e DB_PASS=password \
+                -e DB_NAME=formdb \
                 
             }
         }
