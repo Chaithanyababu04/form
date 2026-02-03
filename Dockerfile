@@ -2,5 +2,5 @@ FROM node:18
 WORKDIR /app
 COPY backend/. .
 RUN npm install
-EXPOSE 3000
+EXPOSE 8080
 CMD ["node", "app.js"]
