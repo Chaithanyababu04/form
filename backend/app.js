@@ -4,11 +4,11 @@ const db = require("./db");
 
 const app = express();
 
-// Middleware
+// middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// ✅ Root route (fixes "Cannot GET /")
+// ✅ ROOT ROUTE (fixes Cannot GET /)
 app.get("/", (req, res) => {
   res.status(200).send("✅ Cloud Run app is working");
 });
@@ -18,7 +18,7 @@ app.post("/submit", (req, res) => {
   const { name, email } = req.body;
 
   if (!name || !email) {
-    return res.status(400).send("Name and email are required");
+    return res.status(400).send("Name and email required");
   }
 
   db.query(
@@ -26,7 +26,7 @@ app.post("/submit", (req, res) => {
     [name, email],
     (err) => {
       if (err) {
-        console.error(err);
+        console.error("MYSQL ERROR:", err);
         return res.status(500).send("DB Error");
       }
       res.send("Data saved successfully!");
@@ -34,7 +34,7 @@ app.post("/submit", (req, res) => {
   );
 });
 
-// ✅ Cloud Run–compatible port
+// ✅ Cloud Run compatible port
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);
