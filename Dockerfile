@@ -2,12 +2,15 @@ FROM node:18
 
 WORKDIR /app
 
+# Install backend dependencies
 COPY backend/package*.json ./
 RUN npm install
 
+# Copy backend code
 COPY backend/. .
-COPY frontend ./frontend
 
+# Copy frontend explicitly
+COPY frontend ./frontend
 
 EXPOSE 8080
 
