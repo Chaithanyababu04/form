@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const path = require("path");
 const db = require("./db");
 
 const app = express();
@@ -8,12 +9,15 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// ✅ ROOT ROUTE (fixes Cannot GET /)
+// ✅ Serve frontend files
+app.use(express.static(path.join(__dirname, "../frontend")));
+
+// ✅ Serve index.html on /
 app.get("/", (req, res) => {
-  res.status(200).send("✅ Cloud Run app is working");
+  res.sendFile(path.join(__dirname, "../frontend/index.html"));
 });
 
-// POST route
+// ✅ Handle form submission
 app.post("/submit", (req, res) => {
   const { name, email } = req.body;
 
@@ -29,7 +33,8 @@ app.post("/submit", (req, res) => {
         console.error("MYSQL ERROR:", err);
         return res.status(500).send("DB Error");
       }
-      res.send("Data saved successfully!");
+      // simple success page
+      res.send("<h3>Data saved successfully!</h3><a href='/'>Go back</a>");
     }
   );
 });
