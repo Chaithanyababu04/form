@@ -1,18 +1,26 @@
-const mysql = require("mysql2");  // ✅ new client
+const mysql = require("mysql2");
 
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST || "mysql",
-  user: process.env.DB_USER || "root",
-  password: process.env.DB_PASS || "rootpass",
-  database: process.env.DB_NAME || "formdb"
+// Create a connection pool (recommended for Cloud Run)
+const pool = mysql.createPool({
+  host: "127.0.0.1",          // MUST be localhost for Cloud SQL Auth Proxy
+  port: 3306,
+  user: process.env.DB_USER,  // set in Cloud Run env vars
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
+
+  waitForConnections: true,
+  connectionLimit: 5,         // keep small for serverless
+  queueLimit: 0,
 });
 
-connection.connect(err => {
+// Test connection on startup (does NOT crash app)
+pool.getConnection((err, connection) => {
   if (err) {
     console.error("❌ DB connection failed:", err.message);
-    process.exit(1);
+  } else {
+    console.log("✅ DB connected to Cloud SQL");
+    connection.release();
   }
-  console.log("✅ MySQL connected");
 });
 
-module.exports = connection;
+module.exports = pool;
